@@ -57,7 +57,6 @@ export default function Summary() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Price Chart */}
           <div className="bg-white shadow-md rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">Price Summary</h2>
             <BarChart
               dataset={data}
               xAxis={[{ scaleType: 'band', dataKey: 'date' }]}
@@ -68,18 +67,25 @@ export default function Summary() {
 
           {/* Orders Chart */}
           <div className="bg-white shadow-md rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">Orders Summary</h2>
             <LineChart
-  xAxis={[{ data: data.map(d=>new Date(d.date).getDate()) }]}
-  series={[
+  xAxis={[
     {
-      data: data.map(d=>d.price),
-      area: true,
+      scaleType: 'band',
+      data: data.map((d) => d.date), // Use full date strings
+      label: 'Date',
     },
   ]}
+  series={[
+    {
+      data: data.map((d) => d.price), // Match with `date`
+      label: 'Total Revenue',
+      area: true,
+      color: '#2196F3', // Optional: Add a color for better visibility
+    },
+  ]}
+  tooltip
   width={500}
   height={300}
-  {...chartSettings}
 />
           </div>
         </div>
