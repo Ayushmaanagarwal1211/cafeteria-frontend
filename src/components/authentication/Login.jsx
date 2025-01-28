@@ -22,7 +22,7 @@ const navigate = useNavigate()
     if(formData.email == '' || formData.password=="" ){
         return 
     }
-    const result = await axios.post(`${'http://localhost:5000'}/auth/login`,{
+    const result = await axios.post(`${'https://cafeteira-backend.onrender.com'}/auth/login`,{
         ...formData
     })
     console.log(result)

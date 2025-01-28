@@ -63,7 +63,7 @@ function delay(){
 //     return async function (){
 
 //         try {
-//           const response = await axios("http://localhost:5000/"+url); // Replace with your API URL
+//           const response = await axios("https://cafeteira-backend.onrender.com/"+url); // Replace with your API URL
 //           dispatch(setItem(response.data))
 //         //   dispatch(setData(data)); // Dispatch data to set in the store
 //         } catch (error) {

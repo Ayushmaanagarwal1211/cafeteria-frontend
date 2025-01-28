@@ -3,7 +3,7 @@ import axios from "axios"
 export async function usePost(url,body){
     const token = JSON.parse(localStorage.getItem('token'))
     console.log(token)
-    return axios.post(`http://localhost:5000/${url}`,{
+    return axios.post(`https://cafeteira-backend.onrender.com/${url}`,{
       ...body
     },{
         headers:{
