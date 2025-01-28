@@ -2,35 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useGet } from '../../hooks/useGet';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../slices/authSlice';
-import { BarChart } from '@mui/x-charts';
+import { BarChart, LineChart } from '@mui/x-charts';
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
 
-const chartSetting = {
-  yAxis: [
-    {
-      label: 'Value',
-    },
-  ],
-  width: 600,
-  height: 400,
+const chartSettings = {
   sx: {
-    [`.${axisClasses.left} .${axisClasses.label}`]: {
-      transform: 'translate(-20px, 0)',
-    },
-    [`.${axisClasses.bottom} .${axisClasses.label}`]: {
-      transform: 'translate(-5px, 10px)', // Rotate x-axis labels
-      textAnchor: 'end', // Align the text at the end
+    '& .MuiChartsAxis-label': {
+      fontSize: '0.9rem',
+      fontWeight: '500',
     },
   },
+  height: 300,
+  margin: { top: 20, right: 20, bottom: 40, left: 50 },
 };
 
 export default function Summary() {
   const user = useSelector((state) => selectUser(state));
-  const [dates, setDates] = useState([]);
-
+  const [data , setData] = useState([])
   function fetchData() {
     const map = new Map();
-    useGet(user.role === 'customer' ? `order/get-orders-by-user/${user._id}` : `order/get-orders`).then((res) => {
+    useGet(user.role === 'customer' ? `order/get-orders-by-user/${user._id}` : `order/get-all-orders`).then((res) => {
       for (let i of res.data) {
         const price = i.quantity * i.dish.price;
         const date = new Date(i.date).toLocaleDateString()
@@ -39,16 +30,19 @@ export default function Summary() {
         }
         map.set(date, {
           quantity: map.get(date).quantity + i.quantity,
-          price: map.get(date).price + price,
+          price: map.get(date).price + ((+i.quantity) * (+i.dish.price)),
         });
       }
 
-      const arr = Array.from(map.entries()).map(([date, { quantity, price }]) => ({
-        date,
-        quantity,
-        price,
-      }));
-      setDates(arr);
+      let arr = []
+      const dates_arr = [] 
+      Array.from(map.entries()).map(([date, { quantity, price }]) => {
+        arr.push({quantity,price,date})
+
+      });
+      arr = arr.sort((a,b)=>a.date.localeCompare(b.date))
+      setData(arr)
+
     });
   }
 
@@ -65,22 +59,28 @@ export default function Summary() {
           <div className="bg-white shadow-md rounded-xl p-6">
             <h2 className="text-lg font-semibold text-gray-700 mb-4">Price Summary</h2>
             <BarChart
-              dataset={dates}
+              dataset={data}
               xAxis={[{ scaleType: 'band', dataKey: 'date' }]}
-              series={[{ dataKey: 'price', label: 'Price', color: 'green' }]}
-              {...chartSetting}
+              series={[{ dataKey: 'quantity', label: 'Quantities Sold', color: 'green' }]}
+              {...chartSettings}
             />
           </div>
 
           {/* Orders Chart */}
           <div className="bg-white shadow-md rounded-xl p-6">
             <h2 className="text-lg font-semibold text-gray-700 mb-4">Orders Summary</h2>
-            <BarChart
-              dataset={dates}
-              xAxis={[{ scaleType: 'band', dataKey: 'date' }]}
-              series={[{ dataKey: 'quantity', label: 'Orders', color: 'blue' }]}
-              {...chartSetting}
-            />
+            <LineChart
+  xAxis={[{ data: data.map(d=>new Date(d.date).getDate()) }]}
+  series={[
+    {
+      data: data.map(d=>d.price),
+      area: true,
+    },
+  ]}
+  width={500}
+  height={300}
+  {...chartSettings}
+/>
           </div>
         </div>
       </div>

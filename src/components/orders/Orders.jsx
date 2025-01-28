@@ -5,6 +5,8 @@ import { selectUser } from '../../slices/authSlice';
 import { selectOrders, setOrders, toggleOrderStatus } from '../../slices/cafeteriaSlice';
 import { usePut } from '../../hooks/usePut';
 import { toast } from 'react-toastify';
+import { usePagination } from './OrdersHistory';
+// import { genPaginationStructure } from './OrdersHistory';
 
 export default function Orders() {
   return (
@@ -14,20 +16,25 @@ export default function Orders() {
 
 const OrdersPage = () => {
     const orders = useSelector(state=>selectOrders(state))
+  const [structure,currPage,pagination] = usePagination()
 
   const user = useSelector(state=>selectUser(state))
   async function handleChangeStatus(orderId){
-    usePut(`order/change-status/${orderId}`).then(res=>{dispatch(toggleOrderStatus({orderId,value : res.data}));toast("Mark As Completed")})
+    usePut(`order/change-status/${orderId}`).then(res=>{dispatch(toggleOrderStatus({orderId,value : res.data}));toast("Mark As Completed");fetchData(currPage)})
   }
   const dispatch = useDispatch()
-  function fetchData(){
-    useGet(user.role=="customer" ? `order/get-orders-by-user/${user._id}`:`order/get-orders`).then(res=>{
-        res.data = res.data.filter(order=>!order.completed && order.counter&&order.dish);
-        dispatch(setOrders(res.data))})
+  function fetchData(page){
+    useGet(user.role=="customer" ? `order/get-orders-by-user/${user._id}/incomplete?page=${page}`:`order/get-orders/incomplete?page=${page}`).then(res=>{
+      let {curr_page_result}  = res.data
+      console.log(curr_page_result)
+      curr_page_result  =curr_page_result.filter(data=>data.counter && data.dish)
+        dispatch(setOrders(curr_page_result))
+        pagination(res.data)
+      })
   }
   useEffect(()=>{
-    fetchData()
-  },[orders])
+    fetchData(currPage)
+  },[])
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-8">
       <div className="bg-white rounded-xl shadow-lg max-w-5xl w-full p-6">
@@ -52,11 +59,11 @@ const OrdersPage = () => {
             <tbody>
               {orders.map((order) => (
                 <tr key={order.id} className="hover:bg-gray-100 transition-all">
-                  <td className="px-4 py-2 border border-gray-300">{order.dish.name}</td>
+                  <td className="px-4 py-2 border border-gray-300">{order.dish?.name}</td>
                   <td className="px-4 py-2 border border-gray-300">{order.user.name}</td>
                   <td className="px-4 py-2 border border-gray-300">{order.user.email}</td>
                   <td className="px-4 py-2 border border-gray-300 text-center">{order.quantity}</td>
-                  <td className="px-4 py-2 border border-gray-300">{order.counter.name}</td>
+                  <td className="px-4 py-2 border border-gray-300">{order.counter?.name}</td>
                   <td className="px-4 py-2 border border-gray-300 text-center">
                     <span
                       className={`px-3 py-1 text-sm font-medium rounded-full ${
@@ -80,6 +87,46 @@ const OrdersPage = () => {
               ))}
             </tbody>
           </table>
+          <div className="flex justify-center items-center mt-7 gap-2">
+  {/* Previous Button */}
+  <button
+    onClick={() => fetchData(currPage - 1)}
+    disabled={currPage === 1}
+    className={`px-4 py-2 rounded-md shadow ${
+      currPage === 1
+        ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+        : "bg-blue-500 text-white hover:bg-blue-600"
+    } transition-all`}
+  >
+    Previous
+  </button>
+
+  {structure.map((data) => (
+    <button
+      key={data}
+      onClick={() => fetchData(data)}
+      className={`px-4 py-2 rounded-md shadow ${
+        data === currPage
+          ? "bg-blue-600 text-white"
+          : "bg-blue-100 text-blue-500 hover:bg-blue-300"
+      } transition-all`}
+    >
+      {data}
+    </button>
+  ))}
+
+  <button
+    onClick={() => fetchData(currPage + 1)}
+    disabled={currPage === structure.length}
+    className={`px-4 py-2 rounded-md shadow ${
+      currPage === structure.length
+        ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+        : "bg-blue-500 text-white hover:bg-blue-600"
+    } transition-all`}
+  >
+    Next
+  </button>
+</div>
         </div>
       </div>
     </div>

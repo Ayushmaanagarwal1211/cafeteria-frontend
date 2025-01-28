@@ -4,6 +4,42 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../slices/authSlice';
 import { selectOrders, setOrders } from '../../slices/cafeteriaSlice';
 
+export  function usePagination(){
+  const [structure,setStructure] = useState([])
+  const [curr_page,setCurrPage] = useState(1)
+  return [structure,curr_page, function (data){
+    const {currPage,diff,lastPage}  = data
+    let arr = []
+    if(currPage>3){
+      arr.push(1)
+    }
+    if(currPage>4){
+      arr.push('...')
+    }
+    if(currPage-2>0){
+      arr.push(currPage-2)
+    }
+    if(currPage-1>0){
+      arr.push(currPage-1)
+    }
+    arr.push(currPage)
+    if(diff>=1){
+      arr.push(currPage+1)
+    }
+    if(diff>=2){
+      arr.push(currPage+2)
+    }
+    if(diff>=4){
+      arr.push('...')
+      arr.push(lastPage)
+    }else if(diff>=3){
+      arr.push(lastPage)
+    }
+    setCurrPage(currPage)
+    setStructure(arr)
+  }]
+ 
+}
 export default function OrdersHistory() {
   return (
     <OrdersPage/>
@@ -12,18 +48,22 @@ export default function OrdersHistory() {
 
 const OrdersPage = () => {
     const orders = useSelector(state=>selectOrders(state))
-
+  const [structure,currPage,pagination] = usePagination()
   const user = useSelector(state=>selectUser(state))
-
   const dispatch = useDispatch()
-  function fetchData(){
-    useGet(user.role=="customer" ? `order/get-orders-by-user/${user._id}`:`order/get-orders`).then(res=>{
-        res.data = res.data.filter(order=>order.completed&& order.counter&&order.dish);
-        console.log(res.data)
-        dispatch(setOrders(res.data))})
+
+  function fetchData(page){
+    useGet(user.role=="customer" ? `order/get-orders-by-user/${user._id}/completed?page=${page}`:`order/get-orders/completed?page=${page}`).then(res=>{
+        let {curr_page_result}  = res.data
+        curr_page_result  =curr_page_result.filter(data=>data.counter && data.dish)
+
+        dispatch(setOrders(curr_page_result))
+        pagination(res.data)
+      })
   }
+
   useEffect(()=>{
-    fetchData()
+    fetchData(currPage)
   },[])
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-8">
@@ -52,7 +92,7 @@ const OrdersPage = () => {
                   <td className="px-4 py-2 border border-gray-300">{order.user.name}</td>
                   <td className="px-4 py-2 border border-gray-300">{order.user.email}</td>
                   <td className="px-4 py-2 border border-gray-300 text-center">{order.quantity}</td>
-                  <td className="px-4 py-2 border border-gray-300">{order.counter.name}</td>
+                  <td className="px-4 py-2 border border-gray-300">{order.counter?.name}</td>
                   <td className="px-4 py-2 border border-gray-300 text-center">
                     <span
                       className={`px-3 py-1 text-sm font-medium rounded-full ${
@@ -69,6 +109,46 @@ const OrdersPage = () => {
               ))}
             </tbody>
           </table>
+          <div className="flex justify-center items-center mt-7 gap-2">
+  {/* Previous Button */}
+  <button
+    onClick={() => fetchData(currPage - 1)}
+    disabled={currPage === 1}
+    className={`px-4 py-2 rounded-md shadow ${
+      currPage === 1
+        ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+        : "bg-blue-500 text-white hover:bg-blue-600"
+    } transition-all`}
+  >
+    Previous
+  </button>
+
+  {structure.map((data) => (
+    <button
+      key={data}
+      onClick={() => fetchData(data)}
+      className={`px-4 py-2 rounded-md shadow ${
+        data === currPage
+          ? "bg-blue-600 text-white"
+          : "bg-blue-100 text-blue-500 hover:bg-blue-300"
+      } transition-all`}
+    >
+      {data}
+    </button>
+  ))}
+
+  <button
+    onClick={() => fetchData(currPage + 1)}
+    disabled={currPage === structure.length}
+    className={`px-4 py-2 rounded-md shadow ${
+      currPage === structure.length
+        ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+        : "bg-blue-500 text-white hover:bg-blue-600"
+    } transition-all`}
+  >
+    Next
+  </button>
+</div>
         </div>
       </div>
     </div>

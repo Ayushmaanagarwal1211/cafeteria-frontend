@@ -24,7 +24,6 @@ import Summary from './components/summary/Summary'
 function App() {
   
   const role = useSelector(state=>selectUserRole(state))
-  console.log(role)
   return (
     <>
     <BrowserRouter>

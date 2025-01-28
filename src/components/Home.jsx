@@ -38,16 +38,16 @@ export default function Home() {
 return <div className="flex h-screen bg-gray-50">
   <ToastContainer/>
 {/* Mobile sidebar overlay */}
-{isSidebarOpen && (
+{/* {isSidebarOpen && (
   <div 
     className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
     onClick={() => dispatch(toggleSidebar())}
   />
-)}
+)} */}
 
 {/* Sidebar */}
 <div className={`
-  fixed inset-y-0 left-0 z-30 w-64 bg-white transform transition-transform duration-200 ease-in-out
+  fixed inset-y-0 left-0 z-30 w-64 bg-white transform transition-transform z-[1000] duration-200 ease-in-out
   lg:relative lg:transform-none
   ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
 `}>
@@ -55,21 +55,21 @@ return <div className="flex h-screen bg-gray-50">
 </div>
 
 {/* Main content */}
-<div className="flex-1 flex flex-col w-full lg:w-auto">
+<div className="flex-1 flex flex-col w-full lg:w-auto abc z-[1]">
   <header className="bg-white p-4 border-b flex items-center justify-between">
     <div className="flex items-center space-x-4">
       <button 
-        className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
+        className={` ${!isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} lg:hidden p-2 hover:bg-gray-100 rounded-lg`}
         onClick={() =>dispatch(toggleSidebar())}
       >
-        <Menu size={20} />
+       <Menu size={20}/>
       </button>
       
     </div>
    
   </header>
 
-  <main className="overflow-auto flex relative">
+  <main className=" flex relative">
     <div className="min-w-0 w-full">
       <div className="max-w-[100%]  py-8 px-1">
         {/* <AddTask />
