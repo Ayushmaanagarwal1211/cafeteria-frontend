@@ -20,12 +20,15 @@ import ProfilePage from './components/Profile'
 import Orders from './components/orders/Orders'
 import OrdersHistory from './components/orders/OrdersHistory'
 import Summary from './components/summary/Summary'
+import Spinner from './components/Spinner'
+import { selectLoader } from './slices/cafeteriaSlice'
 
 function App() {
-  
+  const loading = useSelector(state=>selectLoader(state))
   const role = useSelector(state=>selectUserRole(state))
   return (
     <>
+  {loading &&  <Spinner/>}
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Landing/>}></Route>

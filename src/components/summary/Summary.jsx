@@ -13,7 +13,7 @@ const chartSettings = {
     },
   },
   height: 300,
-  margin: { top: 20, right: 20, bottom: 40, left: 50 },
+  margin: { top: 70, right: 20, bottom: 40, left: 50 },
 };
 
 export default function Summary() {
@@ -55,8 +55,7 @@ export default function Summary() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Summary</h1>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Price Chart */}
-          <div className="bg-white shadow-md rounded-xl p-6">
+          <div className="bg-white shadow-md rounded-xl p-6 h-auto w-auto">
             <BarChart
               dataset={data}
               xAxis={[{ scaleType: 'band', dataKey: 'date' }]}
@@ -65,26 +64,24 @@ export default function Summary() {
             />
           </div>
 
-          {/* Orders Chart */}
-          <div className="bg-white shadow-md rounded-xl p-6">
+          <div className="bg-white shadow-md rounded-xl p-6 h-auto w-auto">
             <LineChart
   xAxis={[
     {
       scaleType: 'band',
-      data: data.map((d) => d.date), // Use full date strings
+      data: data.map((d) => d.date),
       label: 'Date',
     },
   ]}
   series={[
     {
-      data: data.map((d) => d.price), // Match with `date`
+      data: data.map((d) => d.price), 
       label: 'Total Revenue',
       area: true,
-      color: '#2196F3', // Optional: Add a color for better visibility
+      color: '#2196F3', 
     },
   ]}
   tooltip
-  width={500}
   height={300}
 />
           </div>

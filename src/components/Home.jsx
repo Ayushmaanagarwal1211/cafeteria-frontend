@@ -45,7 +45,6 @@ return <div className="flex h-screen bg-gray-50">
   />
 )} */}
 
-{/* Sidebar */}
 <div className={`
   fixed inset-y-0 left-0 z-30 w-64 bg-white transform transition-transform z-[1000] duration-200 ease-in-out
   lg:relative lg:transform-none
@@ -54,7 +53,6 @@ return <div className="flex h-screen bg-gray-50">
   <Sidebar   />
 </div>
 
-{/* Main content */}
 <div className="flex-1 flex flex-col w-full lg:w-auto abc z-[1]">
   <header className="bg-white p-4 border-b flex items-center justify-between">
     <div className="flex items-center space-x-4">

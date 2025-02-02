@@ -9,7 +9,8 @@ const cafeteriaSlice = createSlice({
         users : [],
         counters : [],
         toast : false,
-        orders : []
+        orders : [],
+        loader : false
     },
     reducers : {
         toggleSidebar : (state,action)=>{
@@ -37,6 +38,9 @@ const cafeteriaSlice = createSlice({
             const {orderId,value} = action.payload
             state.orders = state.orders.map(data=>data._id == orderId ? {...data,completed : value} : data)
         },
+        toggleLoader : (state,action) =>{
+            state.loader = action.payload
+        }
     }   
 
 })
@@ -55,21 +59,8 @@ export function selectToast(state){
 export function selectOrders(state){
     return state.cafeteria.orders
 }
-function delay(){
-    return new Promise(res=>setTimeout(()=>res('sdsd'),3000))
+export function selectLoader(state){
+    return state.cafeteria.loader
 }
-// export  function fetchAndSetStateItems(url,dispatch,setItem) {
-//     // dispatch(setLoading());
-//     return async function (){
-
-//         try {
-//           const response = await axios("https://cafeteira-backend.onrender.com/"+url); // Replace with your API URL
-//           dispatch(setItem(response.data))
-//         //   dispatch(setData(data)); // Dispatch data to set in the store
-//         } catch (error) {
-//         //   dispatch(setError(error.message)); // Dispatch error if the API call fails
-//         }
-//     }
-//   };
-export const  {toggleSidebar, setMerchants,setUsers,setCart,toggleToast,setOrders,toggleOrderStatus} = cafeteriaSlice.actions
+export const  {toggleSidebar, setMerchants,setUsers,setCart,toggleToast,setOrders,toggleOrderStatus,toggleLoader} = cafeteriaSlice.actions
 export default cafeteriaSlice.reducer

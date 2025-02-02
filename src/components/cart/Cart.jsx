@@ -4,7 +4,7 @@ import { changeCartCount, removeCartProduct, selectCart, selectUser, setUser, se
 import { usePut } from '../../hooks/usePut';
 import { usePost } from '../../hooks/usePost';
 import { toast } from 'react-toastify';
-
+import dish from './dish.webp'
 export default function Cart() {
     const cartItems = useSelector(state=>selectCart(state))
     const dispatch = useDispatch()
@@ -48,7 +48,7 @@ const user = useSelector(state=>selectUser(state))
         cartItems?.map((item) => (
           <div key={item._id} className="flex justify-between items-center py-4 border-b">
             <div className="flex items-center">
-              <img src={item.imageUrl} alt={item.name} className="w-16 h-16 object-cover rounded-lg mr-4" />
+              <img src={dish} alt={item.name} className="w-16 h-16 object-cover rounded-lg mr-4" />
               <div>
                 <h3 className="text-xl font-semibold">{item.dish?.name}</h3>
                 <p className="text-gray-600">${item.dish?.price}</p>
@@ -89,7 +89,7 @@ const user = useSelector(state=>selectUser(state))
           <p className="text-2xl font-bold">${cartItems.reduce((total, item) => total + item.dish?.price * item.count, 0).toFixed(2)}</p>
         </div>
       )}
-      <button className='p-2 bg-blue-400' onClick={handleOrder}>Order Now </button>
+      <button className='p-2 bg-blue-400 text-white rounded-xl cursor-pointer' onClick={handleOrder}>Order Now </button>
     </div>
   )
 }

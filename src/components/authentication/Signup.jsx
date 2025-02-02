@@ -22,7 +22,7 @@ const navigate = useNavigate()
     if(formData.password !== formData.confirmPassword || formData.email == '' || formData.name=="" || formData.password=="" || formData.role == ""){
         return 
     }
-    await axios.post(`${'https://cafeteira-backend.onrender.com'}/auth`,{
+    await axios.post(`${'http://localhost:5000'}/auth`,{
         ...formData
     })
     navigate('/login')

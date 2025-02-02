@@ -25,7 +25,7 @@ export default function Sidebar() {
         dispatch(toggleSidebar())
     }
     return (
-      <div className="h-full flex flex-col p-4 z-[10000]">
+      <div className="h-full flex flex-col p-4 z-[1000]">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-3">
             {/* <img
