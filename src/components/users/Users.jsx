@@ -11,7 +11,7 @@ function LoadUsers({promise,render}){
     const currUser = useSelector(state=>selectUser(state))
   return (
     <>
-        <div className='flex flex-wrap gap-4 w-full'>
+        <div className='flex flex-wrap gap-4 w-full h-auto justify-around '>
             {
                 users?.map(user=>user._id !== currUser._id && <UserCard render={render} key={user._id}  user={user}/>)
             }
@@ -26,12 +26,15 @@ export default function Users() {
 
    return (
     <>
-     <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-        Users
-      </h1>
-    <Suspense fallback={<Skeleton/>}>
-        <LoadUsers render={render} promise={promise}/>
-    </Suspense>
+    <div className="dark:bg-gray-900 h-auto min-h-[100vh] p-6 rounded-xl">
+  <h1 className="text-3xl font-bold text-white dark:text-gray-200 mb-8 text-center">
+    Users
+  </h1>
+  <Suspense fallback={<Skeleton />}>
+    <LoadUsers render={render} promise={promise} />
+  </Suspense>
+</div>
+
     </>
    )
 }

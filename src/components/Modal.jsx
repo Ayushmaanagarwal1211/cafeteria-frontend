@@ -31,6 +31,7 @@ const CloseButton = styled.svg`
   right: 18px;
   top: 18px;
   cursor: pointer;
+  color:white;
 `;
 
 const modalVariant = {
@@ -58,6 +59,7 @@ export default function Modal({ modalIsOpen, closeModal, children }) {
           <ModalContainer variants={containerVariant}>
             <CloseButton
               onClick={closeModal}
+              
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20.39 20.39"
             >
@@ -67,8 +69,8 @@ export default function Modal({ modalIsOpen, closeModal, children }) {
                 y1="19.39"
                 x2="1"
                 y2="1"
-                fill="none"
-                stroke="#5c3aff"
+                fill="white"
+                stroke="white"
                 strokeLinecap="round"
                 strokeMiterlimit="10"
                 strokeWidth="2"
@@ -78,8 +80,8 @@ export default function Modal({ modalIsOpen, closeModal, children }) {
                 y1="19.39"
                 x2="19.39"
                 y2="1"
-                fill="none"
-                stroke="#5c3aff"
+                fill="white"
+                stroke="white"
                 strokeLinecap="round"
                 strokeMiterlimit="10"
                 strokeWidth="2"

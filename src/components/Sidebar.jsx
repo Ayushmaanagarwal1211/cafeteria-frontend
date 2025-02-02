@@ -25,47 +25,37 @@ export default function Sidebar() {
         dispatch(toggleSidebar())
     }
     return (
-      <div className="h-full flex flex-col p-4 z-[1000]">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-3">
-            {/* <img
-              src={ 'https://via.placeholder.com/40'}
-              alt="Profile"
-              className="w-10 h-10 rounded-full"
-            /> */}
-            <span className="font-medium">Hey, {user.name}</span>
-          </div>
-          <button 
-            className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
-            onClick={handleClose}
-          >
-            <X size={20} />
-          </button>
+      <div className="h-auto min-h-[100vh] flex flex-col p-4 z-[1000] bg-gray-900 dark:bg-gray-800">
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center space-x-3">
+          <span className="font-semibold text-2xl  text-white dark:text-gray-200">Hey, {user.name}</span>
         </div>
-  
-        <nav className="flex-1">
-          {menuItems.map(({ id, label, icon ,role,path}) => role.includes(userRole) && (
-           <Link to={"/home"+path} >
-           <button
-              key={id}
+        <button 
+          className="lg:hidden p-2 hover:bg-gray-700 rounded-lg"
+          onClick={handleClose}
+        >
+          <X size={20} className="text-white dark:text-gray-200"/>
+        </button>
+      </div>
+    
+      <nav className="flex-1">
+        {menuItems.map(({ id, label, icon, role, path }) => role.includes(userRole) && (
+          <Link to={"/home" + path} key={id}>
+            <button
               onClick={() => {
-                // dispatch(setFilter(id as any));
-                // onClose();
-                setCurrId(id)
+                setCurrId(id);
               }}
-              className={`w-full flex items-center space-x-3 p-2 rounded-lg mb-2 ${
-                currId === id ? 'bg-green-50 text-green-600' : 'hover:bg-gray-50'
+              className={ `font-semibold text-xl cursor-pointer w-full flex items-center space-x-3 p-2 rounded-lg mb-2 ${
+                currId === id ? 'bg-green-600 text-white' : 'hover:bg-gray-700 hover:text-white'
               }`}
             >
-              <icon size={20} />
-              <span>{label}</span>
+              <icon size={20} className="text-white dark:text-gray-200"/>
+              <span className="text-white dark:text-gray-200">{label}</span>
             </button>
-           </Link>
-          ))}
-        </nav>
-  
-        
-  
-      </div>
+          </Link>
+        ))}
+      </nav>
+    </div>
+    
     )
 }

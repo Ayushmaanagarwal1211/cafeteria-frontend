@@ -25,69 +25,64 @@ const navigate = useNavigate()
     const result = await axios.post(`${'https://cafeteira-backend.onrender.com'}/auth/login`,{
         ...formData
     })
-    console.log(result)
     const {user,token} = result.data
     dispatch(setUser(user))
     localStorage.setItem('token',JSON.stringify(token))
-    navigate('/home')
+    navigate('/home/counters')
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100">
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Login
-        </h2>
-        <form onSubmit={handleSubmit}>
-      
-
-          {/* Email */}
-          <div className="mb-5">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-600">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="example@domain.com"
-              className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
-              required
-            />
-          </div>
-
-          {/* Password */}
-          <div className="mb-5">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-600">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
-              required
-            />
-          </div>
-
-
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-indigo-500 text-white py-3 px-4 rounded-lg shadow-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2"
-          >
-                Login
-          </button>
-        </form>
-
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+  <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 max-w-md w-full">
+    <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
+      Login
+    </h2>
+    <form onSubmit={handleSubmit}>
+      {/* Email */}
+      <div className="mb-5">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+          Email
+        </label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="example@domain.com"
+          className="mt-2 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-3 text-gray-700 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+          required
+        />
       </div>
-    </div>
+
+      {/* Password */}
+      <div className="mb-5">
+        <label htmlFor="password" className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+          Password
+        </label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Enter your password"
+          className="mt-2 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-3 text-gray-700 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+          required
+        />
+      </div>
+
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className="w-full cursor-pointer bg-indigo-500 dark:bg-indigo-600 text-white py-3 px-4 rounded-lg shadow-md hover:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+      >
+        Login
+      </button>
+    </form>
+  </div>
+</div>
+
   );
 };
 

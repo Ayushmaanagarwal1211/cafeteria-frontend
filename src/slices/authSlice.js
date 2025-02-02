@@ -14,7 +14,6 @@ const authSlice = createSlice({
         changeCartCount : (state,action)=>{
             const {dishId,change} = action.payload
             state.user.cart = state.user.cart.map(dish=>{
-                console.log(dish._id,dishId)
                 if(dish._id == dishId){
                     return {...dish, count : dish.count + change}
                 }
